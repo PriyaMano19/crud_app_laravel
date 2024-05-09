@@ -237,12 +237,16 @@ public function updateprofile(Request $req)
         $req->validate([            
             'email_add'=>'required|email:users',
             'password'=>'required'
+        ],[
+            'email_add.required' => __('Email is required'),
+            'password.required' => __('password is required'),
+            
         ]);
 
         $register = Register::where('email_add','=',$req->email_add)->first();
         if($register){
             if(Hash::check($req->password, $register->password)){
-               // $req->session()->put('loginId', $register->id);
+              
                return redirect()->route('profile', ['id' => $register->id]);
 
             } else {

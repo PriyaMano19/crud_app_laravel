@@ -1,10 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+// namespace App\Http\Controllers\Auth;
 use App\Models\Register;
 use App\Models\Images; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 
 class RegisterController extends Controller
@@ -70,8 +74,8 @@ class RegisterController extends Controller
               $uploadedImagesCount++;
           }
       }
-     
-      return redirect()->route('profile', ['id' => $register->id]);
+      return  view('login');
+    //   return redirect()->route('profile', ['id' => $register->id]);
   }
   
 //    public function addregister(Request $req){
@@ -155,66 +159,7 @@ class RegisterController extends Controller
        return view('profile')->with("register", $register);
    }
 
-//    public function updateprofile(Request $req)
-//    {
-//        $register = Register::find($req->id);
-   
-//        $validatedData = $req->validate([
-//            'first_name' => 'required|string|max:20',
-//            'last_name' => 'required|string|max:20',
-//            'contact_num' => 'required|string|min:9|max:10|regex:/^[0-9]+$/',
-//            'email_add' => 'required|email',
-//        ], [
-//            'first_name.required' => __('First Name is required'),
-//            'last_name.required' => __('Last Name is required'),
-//            'contact_num.required' => __('Contact number is required'),
-//            'contact_num.numeric' => __('Contact number must be numeric'),
-//            'contact_num.min' => __('Contact number must be at least 9 digits'),
-//            'contact_num.max' => __('Contact number must not exceed 10 digits'),
-//            'email_add.required' => __('Email is required'),
-//            'email_add.email' => __('Email is invalid'),
-//        ]);
-   
-//        $register->update([
-//            'first_name' => $req->first_name,
-//            'last_name' => $req->last_name,
-//            'contact_num' => $req->contact_num,
-//            'email_add' => $req->email_add,
-         
-//        ]);
-//        dd($req->file('profile_image'));
 
-//       $currentImageCount = $register->images()->count();
-   
-//       $allowedImageCount = 5;
-
-//       if ($currentImageCount < $allowedImageCount) {
-      
-//          if ($req->hasFile('profile_image')) {
-//                $uploadedImagesCount = 0;
-//                dd("hello");
-//                foreach ($req->file('profile_image') as $image) {
-              
-//                   if ($currentImageCount + $uploadedImagesCount >= $allowedImageCount) {
-//                      break;
-//                   }
-
-//                   $imageName = $image->getClientOriginalName();
-//                   $image->storeAs('public/profile_image', $imageName);
-
-//                   $imageModel = new Images();
-//                   $imageModel->profile_image = $imageName;
-//                   $imageModel->user_id = $register->id;
-//                   $imageModel->save();
-
-//                   $uploadedImagesCount++;
-//                }
-//          }
-//       }
-  
- 
-//       return redirect()->back();
-//    }
    
    
 public function updateprofile(Request $req)
@@ -236,9 +181,9 @@ public function updateprofile(Request $req)
         'contact_num.max' => __('Contact number must not exceed 10 digits'),
         'email_add.required' => __('Email is required'),
         'email_add.email' => __('Email is invalid'),
-        'profile_image.*.image' => __('The file must be an image.'), // Update the key format
-        'profile_image.*.mimes' => __('The image must be a file of type: jpeg, png, jpg.'), // Update the key format
-        'profile_image.*.max' => __('The image must not be greater than 1MB.'), // Update the key format
+        'profile_image.*.image' => __('The file must be an image.'), 
+        'profile_image.*.mimes' => __('The image must be a file of type: jpeg, png, jpg.'), 
+        'profile_image.*.max' => __('The image must not be greater than 1MB.'), 
     ]);
 
     $register->update([
@@ -251,48 +196,27 @@ public function updateprofile(Request $req)
     $currentImageCount = $register->images()->count();
     $allowedImageCount = 5;
 
-    // if ($currentImageCount < $allowedImageCount) {
-    //     if ($req->hasFile('profile_image')) {
-    //         $uploadedImagesCount = 0;
-    //         foreach ($req->file('profile_image') as $image) {
-    //             if ($currentImageCount + $uploadedImagesCount >= $allowedImageCount) {
-    //                 break;
-    //             }
+    if ($currentImageCount < $allowedImageCount) {
+        if ($req->hasFile('profile_image')) {
+            $uploadedImagesCount = 0;
+            foreach ($req->file('profile_image') as $image) {
+                if ($currentImageCount + $uploadedImagesCount >= $allowedImageCount) {
+                    break;
+                }
 
-    //             $imageName = $image->getClientOriginalName();
-    //             $image->storeAs('public/profile_image', $imageName);
+                $imageName = $image->getClientOriginalName();
+                $image->storeAs('public/profile_image', $imageName);
 
-    //             $imageModel = new Images();
-    //             // $imageModel->profile_image = $imageName;
-    //             $imageModel->user_id = $register->id;
-    //             $imageModel->save();
+                $imageModel = new Images();
+                $imageModel->profile_image = $imageName;
+                $imageModel->user_id = $register->id;
+                $imageModel->save();
 
-    //             $uploadedImagesCount++;
-    //         }
-    //     }
-    // }
-    if ($req->hasFile('profile_image')) {
-        $validatedImages = $req->validate([
-            'profile_image.*' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
-        ]);
-    
-        $uploadedImagesCount = 0;
-        foreach ($validatedImages['profile_image'] as $image) {
-            if ($currentImageCount + $uploadedImagesCount >= $allowedImageCount) {
-                break;
+                $uploadedImagesCount++;
             }
-    
-            $imageName = $image->getClientOriginalName();
-            $image->storeAs('public/profile_image', $imageName);
-    
-            $imageModel = new Images();
-            $imageModel->profile_image = $imageName;
-            $imageModel->user_id = $register->id;
-            $imageModel->save();
-    
-            $uploadedImagesCount++;
         }
     }
+   
     return redirect()->back();
 }
 
@@ -303,6 +227,37 @@ public function updateprofile(Request $req)
       $register->delete();
       return view('register');
    }
+
+   public function loginform()
+    {
+         return  view('login');
+    }
+   public function login(Request $req)
+    {
+        $req->validate([            
+            'email_add'=>'required|email:users',
+            'password'=>'required'
+        ],[
+            'email_add.required' => __('Email is required'),
+            'password.required' => __('password is required'),
+            
+        ]);
+
+        $register = Register::where('email_add','=',$req->email_add)->first();
+        if($register){
+            if(Hash::check($req->password, $register->password)){
+              
+               return redirect()->route('profile', ['id' => $register->id]);
+
+            } else {
+                return back()->with('fail','Password not match!');
+            }
+        } else {
+            return back()->with('fail','This email is not registered.');
+        }        
+    }
+
+     
 
 }
 

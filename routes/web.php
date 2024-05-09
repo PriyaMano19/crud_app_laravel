@@ -26,10 +26,12 @@ Route::get('/delete/{id}', [EmployeeController::class, 'delete']);
 Route::get('/edit/{id}', [EmployeeController::class, 'edit']);
 Route::post('/edit/{id}', [EmployeeController::class, 'update']);
 
-Route::get('/', [RegisterController::class, 'register']);
+Route::get('/register', [RegisterController::class, 'register']);
 Route::post('/addregister', [RegisterController::class, 'addregister']);
 Route::get('/userlist', [RegisterController::class, 'userlist']);
 Route::get('/profile', [RegisterController::class, 'profile'])->name('profile');
 //Route::post('/updateimage/{id}', [RegisterController::class, 'updateimage']);
 Route::post('/editprofile/{id}', [RegisterController::class, 'updateprofile']);
 Route::get('/deleteprofile/{id}', [RegisterController::class, 'deleteprofile']);
+Route::get('/', [RegisterController::class, 'loginform']);
+Route::post('/login', [RegisterController::class, 'login'])->name('login');

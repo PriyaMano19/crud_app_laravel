@@ -149,7 +149,7 @@ class RegisterController extends Controller
 
    public function userlist(Request $req)
    {
-       $register = Register::with('images')->get();
+      $register = Register::with('images')->get();
        return view('userlist')->with("register", $register);
    }
    
@@ -260,4 +260,3 @@ public function updateprofile(Request $req)
      
 
 }
-

@@ -1,0 +1,50 @@
+body {
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4k68fU0EI9hirtrJwaCGhcfBc5cBIUVhe9g&s');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.container.register-form {
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+.container.register-form h1 {
+    color: #002D62;
+    font-weight: bold;
+    font-size: 40px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.container.register-form img {
+    margin-top: 20px;
+    max-width: 30%;
+    margin-bottom: 20px;
+}
+
+.label-style {
+    font-weight: bold;
+    text-align: left;
+}
+
+.btn-primary {
+    background-color: #002D62;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #6CB4EE;
+}

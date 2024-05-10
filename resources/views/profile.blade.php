@@ -14,11 +14,9 @@
 
 <body>
     <div class="container-fluid">
-
         <div class="page-content page-container" id="page-content">
             <div class="padding">
                 <div class="row justify-content-center">
-
                     <div class="col-xl-6 col-md-12">
                         <div class="card user-card-full">
                             <div class="row m-l-0 m-r-0">

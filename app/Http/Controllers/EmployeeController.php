@@ -14,6 +14,22 @@ class EmployeeController extends Controller
 
 
     public function add(Request $req){
+
+        $validatedData = $req->validate([
+          'first_name' => 'required|string|max:20',
+          'last_name' => 'required|string|max:20',
+          'contact_num' => 'required|string|min:9|max:10|regex:/^[0-9]+$/',
+          'email_add' => 'required|email',
+        ],[
+          'first_name.required' => __('First Name is required'),
+          'last_name.required' => __('Last Name is required'),
+          'contact_num.required' => __('Contact number is required'),
+          'contact_num.numeric' => __('Contact number must be numeric'),
+          'contact_num.min' => __('Contact number must be at least 9 digits'),
+          'contact_num.max' => __('Contact number must not exceed 10 digits'),
+          'email_add.required' => __('Email is required'),
+          'email_add.email' => __('Email is invalid'),
+        ]);
         $employee = new Employee;
         $employee->emp_name = $req->emp_name;
         $employee->address = $req->address;
@@ -40,6 +56,22 @@ class EmployeeController extends Controller
 
     public function update(Request $req){
         $employee = Employee::find($req->id);
+        
+        $validatedData = $req->validate([
+          'first_name' => 'required|string|max:20',
+          'last_name' => 'required|string|max:20',
+          'contact_num' => 'required|string|min:9|max:10|regex:/^[0-9]+$/',
+          'email_add' => 'required|email',
+        ],[
+          'first_name.required' => __('First Name is required'),
+          'last_name.required' => __('Last Name is required'),
+          'contact_num.required' => __('Contact number is required'),
+          'contact_num.numeric' => __('Contact number must be numeric'),
+          'contact_num.min' => __('Contact number must be at least 9 digits'),
+          'contact_num.max' => __('Contact number must not exceed 10 digits'),
+          'email_add.required' => __('Email is required'),
+          'email_add.email' => __('Email is invalid'),
+        ]);
         $employee->update([
             'emp_name' => $req->emp_name,
             'address' => $req->address,
